@@ -7,20 +7,37 @@ class HomePageTemp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Components Temp')),
-      body: ListView(children: _crearElements()),
+      body: ListView(children: _crearElementsCurt()),
     );
   }
 
-  List<Widget> _crearElements(){
-   //Aquesta declaració és la nova degut al null safety
-  List<Widget> llista = [];
-  for (String element in elements){
-    final tempWidget = ListTile(
-      title: Text(element)
-    );
-    llista.add(tempWidget);
-    llista.add(Divider());
+  //List<Widget> _crearElements() {
+  //  List<Widget> llista = [];
+  //  elements.forEach((element) {
+  //    llista.add(ListTile(title: Text(element)));
+  //    llista.add(Divider());
+  //  });
+  //  return llista;
+  //}
+
+  List<Widget> _crearElementsCurt() {
+    var widgets = elements.map((element) {
+      return Column(
+        children: [
+          ListTile(
+            title: Text(element),
+            subtitle: Text('Text subtitol'),
+            leading: Icon(Icons.star),
+            trailing: Icon(Icons.pages),
+            onTap: () {
+              print('Has tocat l elemnent');
+            },
+          ),
+          Divider(),
+        ],
+      );
+    });
+
+    return widgets.toList();
   }
-  return llista;
-}
 }

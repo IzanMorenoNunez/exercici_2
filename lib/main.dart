@@ -1,3 +1,4 @@
+import 'package:exercici_2/screens/home_page.dart';
 import 'package:exercici_2/screens/home_temp.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Components',
-      home: HomePageTemp()
+      home: HomePage()
     );
   }
 }
