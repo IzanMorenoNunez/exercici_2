@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class InputPage extends StatefulWidget {
-  const InputPage({super.key});
-
   @override
-  State<InputPage> createState() => _InputPageState();
+  _InputPageState createState() => _InputPageState();
 }
 
 class _InputPageState extends State<InputPage> {
   String _nom = '';
   String _email = '';
   String _data = '';
+  String _pais = 'Andorra';
 
   TextEditingController _inputFieldDataController = TextEditingController();
+
+  List<String> _paisos = ['Andorra', 'Anglaterra', 'Dinamarca', 'Espanya', 'França'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Inputs')),
+      appBar: AppBar(
+        title: Text('Inputs'),
+      ),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
         children: [
@@ -29,6 +33,8 @@ class _InputPageState extends State<InputPage> {
           Divider(),
           _crearData(context),
           Divider(),
+          _crearDropdown(),
+          Divider(),
           _crearPersona(),
         ],
       ),
@@ -37,7 +43,6 @@ class _InputPageState extends State<InputPage> {
 
   Widget _crearInput() {
     return TextField(
-      // autofocus: true,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
         counter: Text('Lletres ${_nom.length}'),
@@ -46,14 +51,14 @@ class _InputPageState extends State<InputPage> {
         helperText: 'Posi el nom complet',
         suffixIcon: Icon(Icons.accessibility),
         icon: Icon(Icons.account_circle),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
       ),
       onChanged: (valor) {
         setState(() {
           _nom = valor;
         });
-
-        //print(_nom);
       },
     );
   }
@@ -62,15 +67,15 @@ class _InputPageState extends State<InputPage> {
     return TextField(
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
         hintText: 'Correu electrònic',
         labelText: 'Correu electrònic',
         suffixIcon: Icon(Icons.alternate_email),
         icon: Icon(Icons.email),
       ),
-      onChanged: (valor) => setState(() {
-        _email = valor;
-      }),
+      onChanged: (valor) => setState(() => _email = valor),
     );
   }
 
@@ -78,17 +83,14 @@ class _InputPageState extends State<InputPage> {
     return TextField(
       obscureText: true,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
         hintText: 'Password',
         labelText: 'Password',
         suffixIcon: Icon(Icons.lock_open),
         icon: Icon(Icons.lock),
       ),
-      onChanged: (valor) {
-        // setState(() {
-        //   _nom = valor;
-        // });
-      },
     );
   }
 
@@ -97,14 +99,16 @@ class _InputPageState extends State<InputPage> {
       enableInteractiveSelection: false,
       controller: _inputFieldDataController,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'Data naixement',
-        labelText: 'Data naixement',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        hintText: 'Data de naixement',
+        labelText: 'Data de naixement',
         suffixIcon: Icon(Icons.perm_contact_calendar),
         icon: Icon(Icons.calendar_today),
       ),
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         _seleccionaData(context);
       },
     );
@@ -116,19 +120,53 @@ class _InputPageState extends State<InputPage> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
+      locale: Locale('ca', 'ES'), // Català
     );
+
     if (picked != null) {
       setState(() {
-        _data = picked.toString();
+        _data = '${picked.day}/${picked.month}/${picked.year}';
         _inputFieldDataController.text = _data;
       });
     }
+  }
+
+  Widget _crearDropdown() {
+    return Row(
+      children: [
+        Icon(Icons.language),
+        SizedBox(width: 30.0),
+        Expanded(
+          child: DropdownButton(
+            value: _pais,
+            items: getOptionDropdown(),
+            onChanged: (opcio) {
+              setState(() {
+                _pais = opcio as String;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<DropdownMenuItem<String>> getOptionDropdown() {
+    List<DropdownMenuItem<String>> llista = [];
+    _paisos.forEach((pais) {
+      llista.add(DropdownMenuItem(
+        child: Text(pais),
+        value: pais,
+      ));
+    });
+    return llista;
   }
 
   Widget _crearPersona() {
     return ListTile(
       title: Text('Nom: $_nom'),
       subtitle: Text('Correu: $_email'),
+      trailing: Text(_pais),
     );
   }
 }

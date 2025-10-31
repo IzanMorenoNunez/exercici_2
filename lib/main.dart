@@ -3,6 +3,7 @@ import 'package:exercici_2/screens/alert_page.dart';
 import 'package:exercici_2/screens/avatar_page.dart';
 import 'package:exercici_2/screens/home_page.dart';
 import 'package:exercici_2/home_temp.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -13,6 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('ca', 'ES'),
+        Locale('es', 'ES'),
+        Locale('en', ''),
+      ],
       debugShowCheckedModeBanner: false,
       title: 'Components',
       //home: HomePage(),
@@ -20,9 +31,7 @@ class MyApp extends StatelessWidget {
       routes: getRoutes(),
       onGenerateRoute: (RouteSettings settings) {
         print('Hem anat a: ${settings.name}');
-        return MaterialPageRoute(
-          builder: (context) => AlertPage()
-        );
+        return MaterialPageRoute(builder: (context) => AlertPage());
       },
     );
   }
